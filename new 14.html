@@ -1,0 +1,104 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const products = [
+  {
+    id: 1,
+    name: "Nk Winflo 10 – White Volt",
+    price: 8999,
+    sizes: [40, 41, 42, 43, 44, 45],
+    image: "https://example.com/winflo-volt.jpg",
+  },
+  {
+    id: 2,
+    name: "Sk Hyper Burst Pro – Beige",
+    price: 9499,
+    sizes: [40, 41, 42, 43, 44],
+    image: "https://example.com/hyper-beige.jpg",
+  },
+  {
+    id: 3,
+    name: "Arforce 1 Ambush – White Duo",
+    price: 5499,
+    sizes: [40],
+    image: "https://example.com/ambush.jpg",
+  },
+]
+
+export default function ShoeStoreEnhanced() {
+  const [cart, setCart] = useState([]);
+
+  // add to cart with quantity
+  const addToCart = (product) => {
+    setCart((prev) => [...prev, { ...product, quantity: 1 }]);
+    alert("Product added to the cart!");
+  };
+
+  // delete from cart
+  const deleteFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  // calculate total price
+  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  return (
+    <div className="p-4">
+      {/* Header with Logo */}
+      <div className="flex items-center mb-6">
+        <img src="/jm-logo.jpg" alt="JM Sports Logo" className="w-12 h-12 rounded-full mr-3" />
+        <h1 className="text-3xl font-semibold">JM SPORTS</h1>
+      </div>
+
+      {/* Product Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {products.map((product) => (
+          <Card key={product.id} className="rounded-2xl shadow p-2">
+            <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-xl" />
+            <CardContent>
+              <h2 className="text-xl font-semibold">{product.name}</h2>
+              <p className="text-green-600 font-semibold">Rs {product.price}</p>
+              <p>Sizes: {product.sizes.join(", ")}</p>
+              <Button className="mt-2 w-full" onClick={() => addToCart(product)}>Add to Cart</Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Cart Section */}
+      <div className="mt-6">
+        <h2 className="text-2xl font-semibold">Cart</h2>
+        {cart.length === 0 ? (
+          <p className="text-gray-500">No items in cart</p>
+        ) : (
+          <ul>
+            {cart.map((item, index) => (
+              <li key={index} className="border-b py-2">
+                {item.name} - Rs {item.price} 
+                <button
+                    onClick={() => deleteFromCart(item.id)}
+                    className="ml-4 px-2 py-1 bg-red-500 text-gray-50 rounded-md">
+                    Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <h3 className="text-lg font-semibold mt-4">
+          Total: Rs {total}
+        </h3>
+      </div>
+
+      {/* WhatsApp Button */}
+      <a
+        href="https://wa.me/923001234567"
+        className="fixed bottom-6 right-6 bg-green-500 text-gray-50 p-3 rounded-full shadow-md"
+        target="_blank"
+        rel="nofollow noopener noreferrer">
+        Chat on WhatsApp
+      </a>
+    </div>
+  );
+}
